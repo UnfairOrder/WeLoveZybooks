@@ -1,3 +1,8 @@
+#Michael Leoni
+#WeLoveZybooks
+#CSM
+#Version 1.0
+
 import time
 
 from tkinter import Button, Label, Tk, messagebox
