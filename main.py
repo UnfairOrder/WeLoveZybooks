@@ -30,61 +30,47 @@ def BusyworkBot():
     sign_in_button.click()
 
 #Messagebox for sign in prompt
-    messagebox.showinfo(title="Sign in", message="Please Sign in, then press OK.")
+    messagebox.showinfo(title="Sign in", message="Please Sign in, navigate into a chapter,then press OK.")
     time.sleep(0.5)
-#Find and Select Mines CSCI 101 book
-    CompSci = driver.find_element(By.XPATH,'//*[@id="ember28"]')
-    CompSci.click()
 
-#User Chapter select prompt
-#FIXME  change to say click okay after selecting chapter
-    messagebox.showinfo("Chapter Select", "Select Lesson / Chapter")
 
 #Find voyeur assignments and 2x check boxes
-    #TODO change voyeur assignments to search by class name
-#    voyeur_assignment_start = driver.find_elements(By.XPATH, '//*[@id="ember466"]/div[1]/div[1]/button/span')
-#    voyeur_assignment_2x = driver.find_elements(By.XPATH, '//*[@id="ember467"]')
+    # viewing_assignment_controls = driver.find_elements(By.CLASS_NAME, "animation-controls")
+    # print("Controls found")
+    # print(viewing_assignment_controls)
+    # for assignment in viewing_assignment_controls:
+    #     buttons = assignment.find_elements(By.XPATH,'./child::*')
+    #     for button in buttons:
+    #         button.click()
+    # continue_buttons = driver.find_elements(By.CLASS_NAME,"play-button")
+    # time.sleep(8)
+    # play_buttons = driver.find_elements(By.CLASS_NAME, "play-button bounce")
+    # print("Play buttons found")
+    # print (play_buttons)
+    # for play_button in play_buttons:
+    #     play_button.click()
 
-#Check 2x boxes for all voyeur_assignments
-   # for i in voyeur_assignment_2x:
-       # i.click()
-#Click all start boxes for voyeur_assignments
-   # for i in voyeur_assignment_start:
-    #    i.click
+    #Search for Pause buttons. If there are none left break the loop
+
+
+
+
 
 #Find Multiple Choice Questions
 
-    Mult_Choice = driver.find_elements(By.CLASS_NAME ,"question")
+    Mult_Choice = driver.find_elements(By.CLASS_NAME ,"question-choices")
     print("Located questions")
     print(Mult_Choice)
-#Interate through list
-    for question in Mult_Choice:
-       print("Starting loop")
-       #FIXME options list empty
-       #    bad xpath likely / change to find classname or something
-       options = question.find_elements(By.XPATH,'.//input[@type = "radio" and @name = "32"]' )
-       print("Options located")
-       print(options)
-       for bubble in options:
-            bubble.click()
-            print("Bubble Clicked")
-            #Fixme The message object is outside the question class on the webpage
-            #   This means I need to reconfigure this to search for all the message objects and line them up 1:1 for the loops
-            answer = question.find_element(By.CLASS_NAME,'message').text()
-            if answer == "Correct":
-                print("Correct answer found")
-                break
+    for Question in Mult_Choice:
+        Options = Question.find_elements(By.XPATH,'./child::*')
+        if Options != []:
+            print("Options found!")
+            for i in Options:
+                print(i.text)
+                i.click()
 
     time.sleep(12)
     driver.quit()
-    #TODO Complete Chapter / Assignment
-    #   Multiple Choice Questions
-    #       Store Question Elements in list
-    #           Search Question for Options
-    #           Search Question for answer selection
-    #           Break loop if answer is correct
-
-
 
 #TODO make the window a little nicer
 #Root Window creation
