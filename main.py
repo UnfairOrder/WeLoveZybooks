@@ -4,7 +4,6 @@
 #Version 1.0
 
 import time
-
 from tkinter import Button, Label, Tk, messagebox
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -33,32 +32,10 @@ def BusyworkBot():
     messagebox.showinfo(title="Sign in", message="Please Sign in, navigate into a chapter,then press OK.")
     time.sleep(0.5)
 
-
-#Find voyeur assignments and 2x check boxes
-    # viewing_assignment_controls = driver.find_elements(By.CLASS_NAME, "animation-controls")
-    # print("Controls found")
-    # print(viewing_assignment_controls)
-    # for assignment in viewing_assignment_controls:
-    #     buttons = assignment.find_elements(By.XPATH,'./child::*')
-    #     for button in buttons:
-    #         button.click()
-    # continue_buttons = driver.find_elements(By.CLASS_NAME,"play-button")
-    # time.sleep(8)
-    # play_buttons = driver.find_elements(By.CLASS_NAME, "play-button bounce")
-    # print("Play buttons found")
-    # print (play_buttons)
-    # for play_button in play_buttons:
-    #     play_button.click()
-
-    #Search for Pause buttons. If there are none left break the loop
-
-
-
-
-
-#Find Multiple Choice Questions
-
+#Multiple Choice
+    multiple_choice_count = 0
     Mult_Choice = driver.find_elements(By.CLASS_NAME ,"question-choices")
+    multiple_choice_count +=1
     print("Located questions")
     print(Mult_Choice)
     for Question in Mult_Choice:
@@ -68,11 +45,52 @@ def BusyworkBot():
             for i in Options:
                 print(i.text)
                 i.click()
+    #TODO: detect finish / loading
 
-    time.sleep(12)
-    driver.quit()
+    print("participation assignments")
+    time.sleep(2)
+
+#Participation assignments
+    viewing_assignment_controls = driver.find_elements(By.CLASS_NAME, "animation-controls")
+    print("Controls found")
+    print(viewing_assignment_controls)
+    participation_assignment_count = 0
+    for assignment in viewing_assignment_controls:
+        participation_assignment_count +=1
+        buttons = assignment.find_elements(By.XPATH,'./child::*')
+        for button in buttons:
+            driver.execute_script("arguments[0].click();", button)
+
+    #Loop for play button clicking
+    while (True):
+        play_buttons = driver.find_elements(By.CLASS_NAME, 'play-button') #This works to detect the play button
+        if play_buttons == []:
+            print("failed search")
+        else:
+            print("success!")
+            for b in play_buttons:
+                print(b)
+        for button in play_buttons:
+            print(button.get_attribute('class'))
+            if button.get_attribute('class') == 'play-button bounce':
+                driver.execute_script("arguments[0].click();", button) #This is crucial and works
+
+        completed_boxes = driver.find_elements(By.CLASS_NAME,'zb-chevron')
+        i=0
+        for item in completed_boxes:
+            if item.get_attribute("class") == 'zb-chevron check title-bar-chevron orange  filled  large':
+                i+=1
+        time.sleep(1)
+        if i==participation_assignment_count+multiple_choice_count:
+            break
+
+
+#Find Multiple Choice Questions
+
+
 
 #TODO make the window a little nicer
+#TODO give window continue vs stop for chapter button
 #Root Window creation
 root = Tk()
 root.title("We love Zybooks")
@@ -87,3 +105,9 @@ subTitle.pack(side="top")
 start_button = Button(root ,text = "Start", fg='blue',command=lambda:[root.withdraw(),BusyworkBot()], font=("Arial",25))
 start_button.pack(side="bottom")
 root.mainloop()
+root.destroy()
+
+next_chapter = Tk()
+root.title("Next Chapter")
+#Next Chapter button
+
