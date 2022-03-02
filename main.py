@@ -10,32 +10,16 @@ from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
 
-#TODO installer
-#   Password for install
-#   Multi platform
-#   hide webdriver console
+def NextChapter(driver):
+    driver.find_element(By.CLASS_NAME,'nav-text').click()
 
-def BusyworkBot():
-#Driver Initialization
-    service = Service(executable_path=ChromeDriverManager().install())
-    driver = webdriver.Chrome(service = service)
-#Opening Zybooks
-    driver.get("https://www.zybooks.com/")
-    driver.maximize_window()    #Fullscreen to minimize Element searches
-    time.sleep(1)   #Wait for Browser to Load
-
-#Find and Click Sign in
-    sign_in_button = driver.find_element(By.XPATH,'/html/body/div[1]/header/div[2]/div/div/nav/div/ul/li[7]/a/span[2]')
-    sign_in_button.click()
-
-#Messagebox for sign in prompt
-    messagebox.showinfo(title="Sign in", message="Please Sign in, navigate into a chapter,then press OK.")
-    time.sleep(0.5)
+def BusyworkBot(driver):
+    print("testing line")
 
 #Multiple Choice
     multiple_choice_count = 0
     Mult_Choice = driver.find_elements(By.CLASS_NAME ,"question-choices")
-    multiple_choice_count +=1
+    multiple_choice_count += 1
     print("Located questions")
     print(Mult_Choice)
     for Question in Mult_Choice:
@@ -83,31 +67,46 @@ def BusyworkBot():
         time.sleep(1)
         if i==participation_assignment_count+multiple_choice_count:
             break
-
-
-#Find Multiple Choice Questions
-
-
-
+    time.sleep(3)
 #TODO make the window a little nicer
 #TODO give window continue vs stop for chapter button
+
+
+# Driver Initialization
+service = Service(executable_path=ChromeDriverManager().install())
+driver = webdriver.Chrome(service=service)
+# Opening Zybooks
+driver.get("https://www.zybooks.com/")
+driver.maximize_window()  # Fullscreen to minimize Element searches
+time.sleep(5)  # Wait for Browser to Load
+
+# Find and Click Sign in
+sign_in_button = driver.find_element(By.XPATH, '/html/body/div[1]/header/div[2]/div/div/nav/div/ul/li[7]/a/span[2]')
+sign_in_button.click()
+
+
 #Root Window creation
 root = Tk()
 root.title("We love Zybooks")
 root.geometry("400x250")
+
 #Title Label
 Title = Label(root, text="We love Zybooks", font=("Arial",25))
 Title.pack(side = "top")
-#Subtitle Label
-subTitle = Label(root, text="I used the Zybooks to destroy the zybooks", font=("Arial", 14))
-subTitle.pack(side="top")
-#start button
-start_button = Button(root ,text = "Start", fg='blue',command=lambda:[root.withdraw(),BusyworkBot()], font=("Arial",25))
-start_button.pack(side="bottom")
-root.mainloop()
-root.destroy()
 
-next_chapter = Tk()
-root.title("Next Chapter")
-#Next Chapter button
+#Subtitle Label
+subTitle = Label(root, text="press start once a chapter is selected", font=("Arial", 14))
+subTitle.pack(side="top")
+
+#start button
+start_button = Button(root, text="Start", fg='blue', command=lambda: [BusyworkBot(driver)], font=("Arial", 25))
+start_button.pack(side="bottom")
+
+#next Chapter button
+next_chapter = Button(root ,text = "Next Chapter", fg='green',command=lambda:[NextChapter(driver)], font=("Arial",25))
+next_chapter.pack(side="bottom")
+
+wait_button = messagebox.showinfo("Please sign in")
+
+root.mainloop()
 
