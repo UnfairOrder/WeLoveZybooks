@@ -33,6 +33,7 @@ def BusyworkBot(driver):
                 print("It's right!")
                 break
 
+    time.sleep(2)
     print("participation assignments")
 
 #Participation assignments
@@ -70,7 +71,7 @@ def BusyworkBot(driver):
             break
     time.sleep(3)
 #TODO make the window a little nicer
-#TODO give window continue vs stop for chapter button
+    # TODO add something to show the program is still running.
 
 
 # Driver Initialization
