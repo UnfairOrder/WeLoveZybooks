@@ -24,15 +24,16 @@ def BusyworkBot(driver):
     print(Mult_Choice)
     for Question in Mult_Choice:
         Options = Question.find_elements(By.XPATH,'./child::*')
-        if Options != []:
-            print("Options found!")
-            for i in Options:
-                print(i.text)
-                i.click()
-    #TODO: detect finish / loading
+        for button in Options:
+            button.click()
+            time.sleep(0.125)
+            Main_Question = Question.find_element(By.XPATH,"..")
+            Response = Main_Question.find_element(By.XPATH,"./following-sibling::*")
+            if Response.get_attribute("class")=="zb-explanation has-explanation correct":
+                print("It's right!")
+                break
 
     print("participation assignments")
-    time.sleep(2)
 
 #Participation assignments
     viewing_assignment_controls = driver.find_elements(By.CLASS_NAME, "animation-controls")
